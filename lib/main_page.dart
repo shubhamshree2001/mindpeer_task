@@ -4,6 +4,8 @@ import 'package:mindpeers_task/page/insights.dart';
 import 'package:mindpeers_task/page/more.dart';
 import 'package:mindpeers_task/page/therapy.dart';
 import 'package:mindpeers_task/welcome_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'screens/sign_in.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -11,6 +13,44 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  late User user;
+  bool isSignedIn = false;
+
+  checkAuthentication() async {
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => SignIn()));
+      }
+    });
+  }
+
+  getUser() {
+    User? user = _auth.currentUser; //get user
+    user?.reload(); //reload user
+    user = _auth.currentUser; //then provide current user
+    if (user != null) {
+      setState(() {
+        this.user = user!;
+        this.isSignedIn = true;
+      });
+    }
+    print(this.user);
+  }
+
+  void signOutUser() async {
+    _auth.signOut();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.checkAuthentication();
+    this.getUser();
+  }
+
   List pages = [
     WelcomeScreen(),
     Therapy(),

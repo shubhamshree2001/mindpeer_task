@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mindpeers_task/main_page.dart';
+import 'package:mindpeers_task/screens/sign_in.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'dart:async';
 import 'welcome_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(HomePage());
 }
 
@@ -17,7 +22,7 @@ class HomePage extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Color(0XFF0B1523),
       ),
-      home: MainPage(),
+      home: SignIn(),
       routes: {
         "/welcomescreen": (_) => MainPage(),
       },

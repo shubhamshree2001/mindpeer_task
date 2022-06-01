@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -8,11 +9,24 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  void signOutUser() async {
+    _auth.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                print("signout user");
+                signOutUser();
+              },
+              icon: Icon(Icons.add_to_home_screen))
+        ],
         leadingWidth: 60,
         elevation: 0,
         leading: Padding(
